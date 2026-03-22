@@ -1,63 +1,41 @@
-pipeline{
-    
-    agent any;
-    
-    stages{
-        stage("Code Clone"){
-            steps{
-               script{
-                   clone("https://github.com/anniii28/two-tier-flask-app.git", "Major_new_march")
-               }
+@Library("my-shared-library") _  // 'my-shared-library' is the name you set in Jenkins Global Settings
+
+pipeline {
+    agent any
+
+    stages {
+        stage("Code Clone") {
+            steps {
+                script {
+                    // This calls 'vars/clone.groovy' from your library
+                    clone("https://github.com/Loki180128/two-tier-flask-app.git", "master")
+                }
             }
         }
-        stage("Trivy File System Scan"){
-            steps{
-                script{
+
+        stage("Security Scan") {
+            steps {
+                script {
+                    // This calls 'vars/trivy_fs.groovy' from your library
                     trivy_fs()
                 }
             }
         }
-        stage("Build"){
-            steps{
-                sh "docker build -t two-tier-flask-app ."
-            }
-            
-        }
-        stage("Test"){
-            steps{
-                echo "Developer / Tester tests likh ke dega..."
-            }
-            
-        }
-        stage("Push to Docker Hub"){
-            steps{
-                script{
-                    docker_push("dockerHubCreds","two-tier-flask-app")
-                }  
-            }
-        }
-        stage("Deploy"){
-            steps{
-                sh "docker compose up -d --build flask-app"
-            }
-        }
-    }
 
-post{
-        success{
-            script{
-                emailext from: 'jadhavaniket1928@gmail.com',
-                to: 'hanumandada.1126@gmail.com',
-                body: 'Build success for Demo CICD App',
-                subject: 'Build success for Demo CICD App'
+        stage("Build & Push") {
+            steps {
+                script {
+                    // This calls 'vars/docker_push.groovy' from your library
+                    // It handles the login, tagging, and pushing automatically
+                    docker_push("dockerHubCreds", "two-tier-flask-app")
+                }
             }
         }
-        failure{
-            script{
-                emailext from: 'jadhavaniket1928@gmail.com',
-                to: 'hanumandada.1126@gmail.com',
-                body: 'Build Failed for Demo CICD App',
-                subject: 'Build Failed for Demo CICD App'
+
+        stage("Deploy") {
+            steps {
+                // Deployment is usually specific to the app, so we keep it here
+                sh "docker compose up -d --build flask-app"
             }
         }
     }
