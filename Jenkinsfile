@@ -1,4 +1,3 @@
-
 pipeline{
     
     agent { label "dev"};
@@ -7,7 +6,7 @@ pipeline{
         stage("Code Clone"){
             steps{
                script{
-                   clone("https://github.com/Anniii28/two-tier-flask-app.git", "master")
+                   clone("https://github.com/Anniii28/two-tier-flask-app.git", "Major_new_march")
                }
             }
         }
