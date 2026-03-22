@@ -1,4 +1,4 @@
-@Library("Shared") _
+
 pipeline{
     
     agent { label "dev"};
@@ -7,7 +7,7 @@ pipeline{
         stage("Code Clone"){
             steps{
                script{
-                   clone("https://github.com/LondheShubham153/two-tier-flask-app.git", "master")
+                   clone("https://github.com/Anniii28/two-tier-flask-app.git", "master")
                }
             }
         }
@@ -47,16 +47,16 @@ pipeline{
 post{
         success{
             script{
-                emailext from: 'mentor@trainwithshubham.com',
-                to: 'mentor@trainwithshubham.com',
+                emailext from: 'jadhavaniket1928@gmail.com',
+                to: 'hanumandada.1126@gmail.com',
                 body: 'Build success for Demo CICD App',
                 subject: 'Build success for Demo CICD App'
             }
         }
         failure{
             script{
-                emailext from: 'mentor@trainwithshubham.com',
-                to: 'mentor@trainwithshubham.com',
+                emailext from: 'jadhavaniket1928@gmail.com',
+                to: 'hanumandada.1126@gmail.com',
                 body: 'Build Failed for Demo CICD App',
                 subject: 'Build Failed for Demo CICD App'
             }
