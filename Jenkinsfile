@@ -32,5 +32,23 @@ pipeline{
         }
         
     }
+
+post{
+    sucess{
+        emailext(
+        subject: "Build Successful",
+        body: "good News: Your Build was successful",
+        to: 'jadhavaniket410@gmail.com'
+        
+            )
+    }
+    failure{
+        emailext(
+        subject: "Build failed",
+        body: "Bad News: Your Build failed",
+        to: 'jadhavaniket410@gmail.com'
+            )
+    }
+}
     
 }
